@@ -78,7 +78,21 @@ jobs:
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-    - name: Update App Runner service
+    - name: Verify App Runner ARN
       run: |
-        aws apprunner start-deployment --service-arn ${{ secrets.APP_RUNNER_SERVICE_ARN }}
+        if [ -z "${{ secrets.APP_RUNNER_SERVICE_ARN }}" ]; then
+          echo "❌ APP_RUNNER_SERVICE_ARN secret is not set"
+          exit 1
+        else
+          echo "✅ APP_RUNNER_SERVICE_ARN secret is configured"
+          echo "ARN: ${{ secrets.APP_RUNNER_SERVICE_ARN }}"
+        fi
+
+    - name: Update App Runner service
+      env:
+        APP_RUNNER_SERVICE_ARN: ${{ secrets.APP_RUNNER_SERVICE_ARN }}
+      run: |
+        echo "Starting deployment for service: $APP_RUNNER_SERVICE_ARN"
+        aws apprunner start-deployment --service-arn "$APP_RUNNER_SERVICE_ARN"
+        echo "Deployment started successfully"
 
