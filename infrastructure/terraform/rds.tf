@@ -78,8 +78,26 @@ resource "aws_db_instance" "postgres" {
   skip_final_snapshot = true
   deletion_protection = false
 
+  # Permitir conexões sem SSL para simplificar
+  parameter_group_name = aws_db_parameter_group.postgres.name
+
   tags = {
     Name = "${var.project_name}-postgres"
+  }
+}
+
+# Parameter group para PostgreSQL
+resource "aws_db_parameter_group" "postgres" {
+  family = "postgres17"
+  name   = "${var.project_name}-postgres-params"
+
+  parameter {
+    name  = "rds.force_ssl"
+    value = "0"
+  }
+
+  tags = {
+    Name = "${var.project_name}-postgres-params"
   }
 }
 

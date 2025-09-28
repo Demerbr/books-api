@@ -87,6 +87,17 @@ resource "aws_iam_role_policy_attachment" "apprunner_ecr" {
   policy_arn = aws_iam_policy.apprunner_ecr_policy.arn
 }
 
+# VPC Connector para App Runner
+resource "aws_apprunner_vpc_connector" "main" {
+  vpc_connector_name = "${var.project_name}-vpc-connector"
+  subnets           = aws_subnet.private[*].id
+  security_groups   = [aws_security_group.app_runner.id]
+
+  tags = {
+    Name = "${var.project_name}-vpc-connector"
+  }
+}
+
 resource "aws_apprunner_service" "books_api" {
   service_name = "${var.project_name}-api"
 
@@ -115,6 +126,13 @@ resource "aws_apprunner_service" "books_api" {
   instance_configuration {
     cpu    = "0.25 vCPU"
     memory = "0.5 GB"
+  }
+
+  network_configuration {
+    egress_configuration {
+      egress_type       = "VPC"
+      vpc_connector_arn = aws_apprunner_vpc_connector.main.arn
+    }
   }
 
   tags = {
