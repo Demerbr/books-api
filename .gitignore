@@ -14,9 +14,10 @@ docs/
 *.tfvars
 terraform.tfvars.local
 
-# Terraform state files (optional - remove if you want to track state)
-# terraform.tfstate*
-# .terraform/
+# Terraform files
+terraform.tfstate*
+.terraform/
+.terraform.lock.hcl
 
 # OS generated files
 .DS_Store
