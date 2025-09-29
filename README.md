@@ -1,8 +1,10 @@
 # Books API
 
-Uma API REST para gerenciamento de livros construída com Node.js e PostgreSQL.
+Uma API REST para gerenciamento de livros construída com Node.js e PostgreSQL 
 
-## 🚀 Início Rápido
+ **Nota**: Esta é uma versão modificada da API original desenvolvida por [alencarlucas](https://github.com/alencarlucas/books-api) para realização de teste técnico. A API original pode ser encontrada em: https://github.com/alencarlucas/books-api
+
+
 
 ### Desenvolvimento Local
 
@@ -26,20 +28,9 @@ A aplicação está configurada para deploy automático na AWS usando:
 - **ECR** para registry de imagens Docker
 - **GitHub Actions** para CI/CD
 
-## 📚 Documentação
 
-Toda a documentação técnica foi movida para a pasta `docs/` para manter o repositório limpo.
 
-### Documentos Disponíveis:
-- `docs/ARCHITECTURE.md` - Arquitetura da aplicação na AWS
-- `docs/DATABASE_MIGRATION.md` - Migração do banco local para RDS
-- `docs/INFRASTRUCTURE_SUMMARY.md` - Resumo da infraestrutura criada
-- `docs/SECURITY_GUIDE.md` - Guia de segurança e boas práticas
-- `docs/GITHUB_CREDENTIALS_SETUP.md` - Configuração de credenciais
-- `docs/ENV-SETUP.md` - Configuração de ambiente
-- `docs/DEPLOY-AWS.md` - Guia de deploy para AWS
-
-## 🔧 Tecnologias
+##  Tecnologias
 
 - **Backend**: Node.js, Express.js
 - **Banco de Dados**: PostgreSQL
@@ -48,21 +39,64 @@ Toda a documentação técnica foi movida para a pasta `docs/` para manter o rep
 - **CI/CD**: GitHub Actions
 - **Infraestrutura**: Terraform
 
-## 📝 API Endpoints
+## API Endpoints
 
 - `GET /books` - Listar todos os livros
 - `GET /books/:id` - Buscar livro por ID
 - `GET /books/search?q=termo` - Buscar livros por termo
-- `POST /books` - Criar novo livro
-- `PUT /books/:id` - Atualizar livro
-- `DELETE /books/:id` - Deletar livro
 
-## 🔒 Segurança
+
+## Segurança
 
 - Arquivos sensíveis protegidos via `.gitignore`
 - Credenciais AWS configuradas como secrets no GitHub
 - Banco de dados em subnets privadas
 - Security groups com regras restritivas
+
+## Melhorias Implementadas 
+
+### **Sistema de Preços Integrado**
+- Campo `price` adicionado ao modelo de livros
+- Preços  configurados para todos os livros de exemplo
+- Suporte a valores decimais (DECIMAL(10,2)) para precisão financeira
+- Ideal para implementar funcionalidades de e-commerce como carrinho de compras
+
+### **Performance Otimizada**
+- Pool de conexões configurável via `DB_POOL`
+- Conexões reutilizadas para reduzir latência
+- Melhor escalabilidade para múltiplas requisições simultâneas
+
+### **Configuração CORS Inteligente**
+- **Desenvolvimento**: Permite origens (localhost:3000, localhost:3001, 127.0.0.1:3000, 127.0.0.1:3001)
+- **Produção**: Restringe a origem específica via `FRONTEND_URL`
+- **Segurança**: Validação rigorosa de origens em ambos os ambientes
+- **Headers**: Configurados para métodos GET, POST, PUT, DELETE, OPTIONS
+- **Credenciais**: Suporte a cookies e autenticação via `Access-Control-Allow-Credentials`
+
+##  Histórico de Mudanças
+
+### Novos endpoints criados:
+
+- Nenhum endpoint novo foi adicionado na versão atual
+
+### Campos adicionados ao modelo:
+
+- **price**: Campo decimal para preço dos livros (DECIMAL(10,2), padrão 0.00)
+
+### Ajustes de performance ou paginação:
+
+- **Sistema de ordenação flexível**: Suporte a ordenação por `name`, `title`, `date`, `publishedAt`, `createdAt` e `price`
+- **Controle de direção**: Ordenação ascendente (ASC) ou descendente (DESC)
+- **Busca unificada**: Endpoint `/books` com busca por texto integrada via parâmetro `text`
+- **Paginação otimizada**: Suporte a `page` e `limit` em todas as operações (listagem e busca)
+- **Validação de parâmetros**: Campos de ordenação e direção validados para segurança
+- **Pool de conexões configurável**: Via variável `DB_POOL` para melhor performance
+
+### Outros (detalhe brevemente):
+
+- Remoção completa de todos os comentários de código da aplicação
+- Limpeza de arquivos de configuração mantendo apenas funcionalidades essenciais
+- Dados de exemplo pré-carregados com preços configurados
 
 ## 📄 Licença
 
