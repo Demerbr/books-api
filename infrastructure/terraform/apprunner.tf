@@ -33,7 +33,6 @@ resource "aws_ecr_lifecycle_policy" "books_api" {
   })
 }
 
-# IAM Role para App Runner
 resource "aws_iam_role" "apprunner_role" {
   name = "${var.project_name}-apprunner-role"
 
@@ -55,7 +54,6 @@ resource "aws_iam_role" "apprunner_role" {
   }
 }
 
-# Política para App Runner acessar ECR
 resource "aws_iam_policy" "apprunner_ecr_policy" {
   name        = "${var.project_name}-apprunner-ecr-policy"
   description = "Policy for App Runner to access ECR"
@@ -81,13 +79,11 @@ resource "aws_iam_policy" "apprunner_ecr_policy" {
   }
 }
 
-# Anexar política ao role
 resource "aws_iam_role_policy_attachment" "apprunner_ecr" {
   role       = aws_iam_role.apprunner_role.name
   policy_arn = aws_iam_policy.apprunner_ecr_policy.arn
 }
 
-# VPC Connector para App Runner
 resource "aws_apprunner_vpc_connector" "main" {
   vpc_connector_name = "${var.project_name}-vpc-connector"
   subnets           = aws_subnet.private[*].id

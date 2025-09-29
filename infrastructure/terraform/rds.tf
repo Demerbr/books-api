@@ -78,7 +78,6 @@ resource "aws_db_instance" "postgres" {
   skip_final_snapshot = true
   deletion_protection = false
 
-  # Permitir conexões sem SSL para simplificar
   parameter_group_name = aws_db_parameter_group.postgres.name
 
   tags = {
@@ -86,7 +85,6 @@ resource "aws_db_instance" "postgres" {
   }
 }
 
-# Parameter group para PostgreSQL
 resource "aws_db_parameter_group" "postgres" {
   family = "postgres17"
   name   = "${var.project_name}-postgres-params"

@@ -1,4 +1,3 @@
-# Usuário IAM para GitHub Actions
 resource "aws_iam_user" "github_actions" {
   name = "${var.project_name}-github-actions"
   path = "/"
@@ -10,7 +9,6 @@ resource "aws_iam_user" "github_actions" {
   }
 }
 
-# Política IAM para ECR
 resource "aws_iam_policy" "ecr_policy" {
   name        = "${var.project_name}-github-ecr-policy"
   description = "Policy for GitHub Actions to access ECR"
@@ -40,7 +38,6 @@ resource "aws_iam_policy" "ecr_policy" {
   }
 }
 
-# Política IAM para App Runner
 resource "aws_iam_policy" "apprunner_policy" {
   name        = "${var.project_name}-github-apprunner-policy"
   description = "Policy for GitHub Actions to manage App Runner"
@@ -65,24 +62,20 @@ resource "aws_iam_policy" "apprunner_policy" {
   }
 }
 
-# Anexar política ECR ao usuário
 resource "aws_iam_user_policy_attachment" "github_ecr" {
   user       = aws_iam_user.github_actions.name
   policy_arn = aws_iam_policy.ecr_policy.arn
 }
 
-# Anexar política App Runner ao usuário
 resource "aws_iam_user_policy_attachment" "github_apprunner" {
   user       = aws_iam_user.github_actions.name
   policy_arn = aws_iam_policy.apprunner_policy.arn
 }
 
-# Access Key para o usuário (será criada mas não exibida por segurança)
 resource "aws_iam_access_key" "github_actions" {
   user = aws_iam_user.github_actions.name
 }
 
-# Outputs para as credenciais (será necessário copiar manualmente)
 output "github_aws_access_key_id" {
   value       = aws_iam_access_key.github_actions.id
   description = "AWS Access Key ID para configurar no GitHub Secrets"
