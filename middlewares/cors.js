@@ -1,15 +1,18 @@
 module.exports = (req, res, next) => {
   const isDevelopment = process.env.NODE_ENV === 'development';
   
-  // Permitir origens locais para desenvolvimento
+  // Permitir origens locais para desenvolvimento e produção
   const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001', 
-    'http://localhost:8080',
     'http://127.0.0.1:3000',
     'http://127.0.0.1:3001',
-    'http://127.0.0.1:8080'
   ];
+  
+  // Adicionar URL do frontend da variável de ambiente
+  if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+  }
   
   if (isDevelopment) {
     res.header("Access-Control-Allow-Origin", "*");
